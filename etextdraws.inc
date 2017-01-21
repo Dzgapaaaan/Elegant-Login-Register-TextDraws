@@ -13,7 +13,7 @@ static realtimer[MAX_PLAYERS];
 @ Titel: Elegant Login / Register TextDraws
 @ Author: JustMe.77
 @ Version: 1.0.0
-@ Download: Insert Download Link here>
+@ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
 
 
 Credits: 
