@@ -18,7 +18,7 @@ static realtimer[MAX_PLAYERS];
 
 Credits: 
 
-@ Zamaroth - TextDraw Editor
+@ Zamaroht - TextDraw Editor
 @ ipsLeon - This textdraws are inspired a bit by his textdraws from the old project "Zombotec"
 
 
