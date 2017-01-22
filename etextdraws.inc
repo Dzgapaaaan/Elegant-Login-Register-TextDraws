@@ -113,7 +113,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) //You migh
 {
   if(playertextid == PlayerLoginTextDraw[playerid][0])
   {
-    if(IsPlayerAdmin(playerid))
+    if(IsPlayerAdmin(playerid)) //REPLACE WITH YOUR CHECK IF A PLAYER IS ALREADY REGISTERED!!!!!!!!!!!!!!!!!!!!
     {
       ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Type your password below to sign in","Sign In","Quit");
     }
