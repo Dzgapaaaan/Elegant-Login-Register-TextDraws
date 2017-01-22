@@ -4,10 +4,28 @@
 #define LT_ServerName "YOUR_SERVERNAME"
 #define LoginTextDrawColor 0xFF0000FF
 #define TextDrawHoverColor 0x80FF80FF
+//#define RandomLoginColors //Uncomment if you want to have Random Colors for each player
 
 new Text:GlobalLoginTextDraw[29];
 new PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4];
+
 static realtimer[MAX_PLAYERS];
+
+#if defined RandomLoginColors
+
+static RandomLoginColors[] = 
+{
+  0xFF0000FF, //Light Red
+  0x5E0000FF, //Dark Red
+  0x80FF00FF, //Light Green
+  0x005100FF, //Dark Green
+  0x0080C0FF, //Light Blue
+  0x000088FF, //Dark Blue
+  0xFFFFFFFF, //White
+  0x9E9E9EFF //Light Grey
+};
+
+#endif
 
 enum
 {
@@ -22,15 +40,15 @@ enum
 
 @ Titel: Elegant Login / Register TextDraws
 @ Author: JustMe.77
-@ Version: 1.0.1
+@ Version: 1.0.2
 @ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
 
 
 Credits: 
 
-@ Zamaroht - TextDraw Editor
-@ ipsLeon - This textdraws are inspired a bit by his textdraws from the old project "Zombotec"
-
+@ Zamaroht  - TextDraw Editor
+@ ipsLeon   - This textdraws are inspired a bit by his textdraws from the old project "Zombotec"
+@ Jelly23   - Great Support
 
 Available Functions:
 
@@ -45,7 +63,7 @@ PlayerIsNotRegistered(playerid)          - Adapt the Textdraw messages to player
 #define LoginTextDrawColor               - Change the TextDraw Color (PAWN HEX CODE)
 #define TextDrawHoverColor               - Change the TextDraw Hover Color (PAWN HEX CODE)
 #define LT_ServerName                    - Adapt's the Servername (Welcome to YOUR_SERVERNAME..)
-
+#define RandomLoginColors                - Uncommented = Random TextDraw colors for each player
 */
 
 public OnGameModeInit()
@@ -62,7 +80,6 @@ public OnGameModeInit()
 public OnPlayerConnect(playerid)
 {
   realtimer[playerid] = SetTimerEx("LR_UpdateRealTime", 1000, true, "i", playerid);
-
   #if defined ETD_OnPlayerConnect
   return ETD_OnPlayerConnect(playerid);
   #else
@@ -73,7 +90,7 @@ public OnPlayerConnect(playerid)
 public OnPlayerDisconnect(playerid, reason)
 {
   KillTimer(realtimer[playerid]);
-
+  
   #if defined ETD_OnPlayerDisconnect
   return ETD_OnPlayerDisconnect(playerid,reason);
   #else
@@ -107,7 +124,11 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) //You migh
     }
   }
 
+  #if defined elr_OnPlayerClickPlayerTD
+  return elr_OnPlayerClickPlayerTD(playerid, playertextid);
+  #else
   return 1;
+  #endif
 }
 
 public OnPlayerClickTextDraw(playerid, Text:clickedid)
@@ -161,11 +182,11 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 forward LR_UpdateRealTime(playerid);
 public LR_UpdateRealTime(playerid)
 {
-    new str[16];
-    gettime(str[0], str[1]);
-    format(str,sizeof(str),"%02d:%02d Time",str[0],str[1]);
-    PlayerTextDrawSetString(playerid,PlayerLoginTextDraw[playerid][2], str);
-    return 1;
+  new str[16];
+  gettime(str[0], str[1]);
+  format(str,sizeof(str),"%02d:%02d Time",str[0],str[1]);
+  PlayerTextDrawSetString(playerid,PlayerLoginTextDraw[playerid][2], str);
+  return 1;
 }
 
 stock PlayerIsRegistered(playerid)
@@ -197,6 +218,20 @@ stock ShowLoginTextDraws(playerid)
   }
 
   SelectTextDraw(playerid, TextDrawHoverColor);
+  #if defined RandomLoginColors
+  new Randomtextdrawcolor = RandomLoginColors[random(sizeof(RandomLoginColors))];
+  TextDrawBoxColor(GlobalLoginTextDraw[2], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], Randomtextdrawcolor);
+  #else
+  TextDrawBoxColor(GlobalLoginTextDraw[2], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], LoginTextDrawColor);
+  #endif
 }
 
 stock HideLoginTextDraws(playerid)
@@ -279,6 +314,7 @@ forward ETD_OnPlayerDisconnect();
 forward ETD_OnPlayerSpawn();
 #endif
 
+
 #if defined _ALS_OnPlayerClickTextDraw
 #undef OnPlayerClickTextDraw
 #else
@@ -289,6 +325,18 @@ forward ETD_OnPlayerSpawn();
 #if defined ETD_OnPlayerClickTextDraw
 forward ETD_OnPlayerClickTextDraw();
 #endif
+
+#if defined _ALS_OnPlayerClickPlayerTD
+#undef OnPlayerClickPlayerTextDraw
+#else
+#define _ALS_OnPlayerClickPlayerTD
+#endif
+
+#define OnPlayerClickPlayerTextDraw elr_OnPlayerClickPlayerTD
+#if defined elr_OnPlayerClickPlayerTD
+forward elr_OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
+#endif
+
 
 
 stock CreateGlobalLoginTextDraws()
@@ -328,7 +376,6 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[2], 1);
   TextDrawSetShadow(GlobalLoginTextDraw[2], 1);
   TextDrawUseBox(GlobalLoginTextDraw[2], 1);
-  TextDrawBoxColor(GlobalLoginTextDraw[2], LoginTextDrawColor);
   TextDrawTextSize(GlobalLoginTextDraw[2], 469.000000, 0.000000);
   TextDrawSetSelectable(GlobalLoginTextDraw[2], 0);
 
@@ -354,7 +401,6 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[4], 1);
   TextDrawSetShadow(GlobalLoginTextDraw[4], 1);
   TextDrawUseBox(GlobalLoginTextDraw[4], 1);
-  TextDrawBoxColor(GlobalLoginTextDraw[4], LoginTextDrawColor);
   TextDrawTextSize(GlobalLoginTextDraw[4], 263.000000, 0.000000);
   TextDrawSetSelectable(GlobalLoginTextDraw[4], 0);
 
@@ -380,7 +426,6 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[6], 1);
   TextDrawSetShadow(GlobalLoginTextDraw[6], 1);
   TextDrawUseBox(GlobalLoginTextDraw[6], 1);
-  TextDrawBoxColor(GlobalLoginTextDraw[6], LoginTextDrawColor);
   TextDrawTextSize(GlobalLoginTextDraw[6], 263.000000, 0.000000);
   TextDrawSetSelectable(GlobalLoginTextDraw[6], 0);
 
@@ -406,7 +451,6 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[8], 1);
   TextDrawSetShadow(GlobalLoginTextDraw[8], 1);
   TextDrawUseBox(GlobalLoginTextDraw[8], 1);
-  TextDrawBoxColor(GlobalLoginTextDraw[8], LoginTextDrawColor);
   TextDrawTextSize(GlobalLoginTextDraw[8], 263.000000, 0.000000);
   TextDrawSetSelectable(GlobalLoginTextDraw[8], 0);
 
@@ -432,7 +476,6 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[10], 1);
   TextDrawSetShadow(GlobalLoginTextDraw[10], 1);
   TextDrawUseBox(GlobalLoginTextDraw[10], 1);
-  TextDrawBoxColor(GlobalLoginTextDraw[10], LoginTextDrawColor);
   TextDrawTextSize(GlobalLoginTextDraw[10], 263.000000, 0.000000);
   TextDrawSetSelectable(GlobalLoginTextDraw[10], 0);
 
@@ -632,7 +675,9 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetOutline(GlobalLoginTextDraw[28], 1);
   TextDrawSetProportional(GlobalLoginTextDraw[28], 1);
   TextDrawSetSelectable(GlobalLoginTextDraw[28], 0);
+
 }
+
 
 stock CreatePlayerLoginTextDraws(playerid)
 {
