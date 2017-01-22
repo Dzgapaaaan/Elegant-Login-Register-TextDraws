@@ -5,6 +5,7 @@
 | --- | --- |
 | Zamaroht | Using his TextDraw Editor |
 | n0minal | Inspired by his TextDraws |
+| Jelly23 | Great Support |
 
 
 ```
