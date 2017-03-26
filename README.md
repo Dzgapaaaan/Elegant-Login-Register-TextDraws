@@ -3,9 +3,10 @@
 
 | Credits | Reason |
 | --- | --- |
-| Zamaroht | Using his TextDraw Editor |
-| n0minal | Inspired by his TextDraws |
-| Jelly23 | Great Support |
+| MP2 | PNS Coordinates |
+| Jelly23 | Scripting Support |
+| Kaliber | Scripting Support |
+
 
 
 ```
