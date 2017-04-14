@@ -18,8 +18,8 @@
 #define TextDrawHoverColor 0x80FF80FF
 //#define RandomLoginColors //Uncomment if you want to have Random Colors for each player
 
-new Text:GlobalLoginTextDraw[29];
-new PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4];
+static Text:GlobalLoginTextDraw[29],
+PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4];
 
 static realtimer[MAX_PLAYERS];
 
