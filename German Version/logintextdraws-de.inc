@@ -19,9 +19,8 @@
 //#define RandomLoginColors //Auskommentieren wenn du verschiedene Farben für die Login TextDraws haben möchtest
 
 static Text:GlobalLoginTextDraw[29],
-PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4];
-
-static realtimer[MAX_PLAYERS];
+PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
+realtimer[MAX_PLAYERS];
 
 #if defined RandomLoginColors
 
