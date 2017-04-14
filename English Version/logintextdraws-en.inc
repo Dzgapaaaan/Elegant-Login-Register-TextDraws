@@ -1,6 +1,18 @@
-#include <a_samp>
+//Includes
 
-//Customize them to your own
+#include <a_samp> // SA-MP Team
+
+/*
+
+@ Titel: Elegant Login / Register TextDraws
+@ Author: JustMe.77
+@ Version: 1.0.3
+@ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
+
+*/
+
+//Settings
+
 #define LT_ServerName "YOUR_SERVERNAME"
 #define LoginTextDrawColor 0xFF0000FF
 #define TextDrawHoverColor 0x80FF80FF
@@ -13,7 +25,7 @@ static realtimer[MAX_PLAYERS];
 
 #if defined RandomLoginColors
 
-static RandomLoginColors[] = 
+static RandomLoginColorsArray[] = 
 {
   0xFF0000FF, //Light Red
   0x5E0000FF, //Dark Red
@@ -36,35 +48,6 @@ enum
   D_Credits = 10104
 };
 
-/*
-
-@ Titel: Elegant Login / Register TextDraws
-@ Author: JustMe.77
-@ Version: 1.0.2
-@ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
-
-
-Credits: 
-
-@ Zamaroht  - TextDraw Editor
-@ ipsLeon   - This textdraws are inspired a bit by his textdraws from the old project "Zombotec"
-@ Jelly23   - Great Support
-
-Available Functions:
-
-CreateGlobalLoginTextDraws()             - Create all Global-TextDraws
-CreatePlayerLoginTextDraws(playerid)     - Create all Player-TextDraws
-ShowLoginTextDraws(playerid)             - Show all TextDraws
-HideLoginTextDraws(playerid)             - Hide all TextDraws
-DestroyGlobalLoginTextDraws(playerid)    - Destroys all Global-TextDraws
-DestroyPlayerLoginTextDraws(playerid)    - Destroys all Player-TextDraws
-PlayerIsRegistered(playerid)             - Adapt the Textdraw messages to already registered players
-PlayerIsNotRegistered(playerid)          - Adapt the Textdraw messages to players who are not registered
-#define LoginTextDrawColor               - Change the TextDraw Color (PAWN HEX CODE)
-#define TextDrawHoverColor               - Change the TextDraw Hover Color (PAWN HEX CODE)
-#define LT_ServerName                    - Adapt's the Servername (Welcome to YOUR_SERVERNAME..)
-#define RandomLoginColors                - Uncommented = Random TextDraw colors for each player
-*/
 
 public OnGameModeInit()
 {
@@ -219,7 +202,7 @@ stock ShowLoginTextDraws(playerid)
 
   SelectTextDraw(playerid, TextDrawHoverColor);
   #if defined RandomLoginColors
-  new Randomtextdrawcolor = RandomLoginColors[random(sizeof(RandomLoginColors))];
+  new Randomtextdrawcolor = RandomLoginColorsArray[random(sizeof(RandomLoginColorsArray))];
   TextDrawBoxColor(GlobalLoginTextDraw[2], Randomtextdrawcolor);
   TextDrawBoxColor(GlobalLoginTextDraw[4], Randomtextdrawcolor);
   TextDrawBoxColor(GlobalLoginTextDraw[6], Randomtextdrawcolor);
@@ -341,7 +324,7 @@ forward elr_OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
 
 stock CreateGlobalLoginTextDraws()
 {
-  GlobalLoginTextDraw[0] = TextDrawCreate(169.000000, 121.000000, !"_");
+  GlobalLoginTextDraw[0] = TextDrawCreate(169.000000, 121.000000, !"__");
   TextDrawBackgroundColor(GlobalLoginTextDraw[0], 255);
   TextDrawFont(GlobalLoginTextDraw[0], 1);
   TextDrawLetterSize(GlobalLoginTextDraw[0], 0.500000, 26.200000);
