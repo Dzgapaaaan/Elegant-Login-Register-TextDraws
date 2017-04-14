@@ -632,7 +632,7 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[25], 1);
   TextDrawSetSelectable(GlobalLoginTextDraw[25], 0);
 
-  GlobalLoginTextDraw[26] = TextDrawCreate(348.000000, 213.000000, !"Hier finest du allgemeine ~g~Infos~n~~w~\172ber unseren Server.");
+  GlobalLoginTextDraw[26] = TextDrawCreate(348.000000, 213.000000, !"Hier findest du allgemeine ~g~Infos~n~~w~\172ber unseren Server.");
   TextDrawBackgroundColor(GlobalLoginTextDraw[26], 255);
   TextDrawFont(GlobalLoginTextDraw[26], 2);
   TextDrawLetterSize(GlobalLoginTextDraw[26], 0.129997, 0.899999);
