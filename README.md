@@ -10,16 +10,18 @@
 
 
 ```
-CreateLoginTextDraws(playerid) 	    - Create all TextDraws
-ShowLoginTextDraws(playerid) 	    - Show all TextDraws
-HideLoginTextDraws(playerid) 	    - Hide all TextDraws
-DestroyLoginTextDraws(playerid)     - Destroys all TextDraws
-PlayerIsRegistered(playerid) 	    - Adapt the Textdraw messages to already registered players
-PlayerIsNotRegistered(playerid)     - Adapt the Textdraw messages to players who are not registered
-#define LoginTextDrawColor          - Change the TextDraw Color (PAWN HEX CODE)
-#define TextDrawHoverColor 	    - Change the TextDraw Hover Color (PAWN HEX CODE)
-#define LT_ServerName		    - Adapt's the Servername (Welcome to YOUR_SERVERNAME..)
-#define RandomLoginColors           - Uncommented = Random TextDraw colors for each player
+CreateGlobalLoginTextDraws()             - Create all Global-TextDraws
+CreatePlayerLoginTextDraws(playerid)     - Create all Player-TextDraws
+ShowLoginTextDraws(playerid)             - Show all TextDraws
+HideLoginTextDraws(playerid)             - Hide all TextDraws
+DestroyGlobalLoginTextDraws(playerid)    - Destroys all Global-TextDraws
+DestroyPlayerLoginTextDraws(playerid)    - Destroys all Player-TextDraws
+PlayerIsRegistered(playerid)             - Adapt the Textdraw messages to already registered players
+PlayerIsNotRegistered(playerid)          - Adapt the Textdraw messages to players who are not registered
+#define LoginTextDrawColor               - Change the TextDraw Color (PAWN HEX CODE)
+#define TextDrawHoverColor               - Change the TextDraw Hover Color (PAWN HEX CODE)
+#define LT_ServerName                    - Adapt's the Servername (Welcome to YOUR_SERVERNAME..)
+#define RandomLoginColors                - Uncommented = Random TextDraw colors for each player
 
 ```
 
