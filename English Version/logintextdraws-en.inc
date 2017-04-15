@@ -18,9 +18,10 @@
 #define TextDrawHoverColor 0x80FF80FF
 //#define RandomLoginColors //Uncomment if you want to have Random Colors for each player
 
-static Text:GlobalLoginTextDraw[29],
+new Text:GlobalLoginTextDraw[29],
 PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
-realtimer[MAX_PLAYERS];
+realtimer[MAX_PLAYERS],
+bool:pRegistered[MAX_PLAYERS];
 
 #if defined RandomLoginColors
 
@@ -71,6 +72,7 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+  pRegistered[playerid] = false;
   KillTimer(realtimer[playerid]);
   
   #if defined ETD_OnPlayerDisconnect
@@ -95,7 +97,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) //You migh
 {
   if(playertextid == PlayerLoginTextDraw[playerid][0])
   {
-    if(IsPlayerAdmin(playerid)) //REPLACE WITH YOUR CHECK IF A PLAYER IS ALREADY REGISTERED!!!!!!!!!!!!!!!!!!!!
+    if(pRegistered[playerid] == true)
     {
       ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Type your password below to sign in","Sign In","Quit");
     }
@@ -173,6 +175,7 @@ public LR_UpdateRealTime(playerid)
 
 stock PlayerIsRegistered(playerid)
 {
+  pRegistered[playerid] = true;
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"This name seem to be ~g~registered~w~.~n~You can now ~g~login~w~ to your Account.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"      Login"); 
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], !"          Welcome back!"); 
@@ -180,6 +183,7 @@ stock PlayerIsRegistered(playerid)
 
 stock PlayerIsNotRegistered(playerid)
 {
+  pRegistered[playerid] = false;
   new str[128]; //Adapt the size..
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"This name is ~g~not~w~ registered.~n~You can now create an ~g~Account.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"   Register");
