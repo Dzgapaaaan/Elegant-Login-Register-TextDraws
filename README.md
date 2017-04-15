@@ -44,3 +44,24 @@ public OnPlayerConnect(playerid)
     return 1;
 
 ```
+
+Example of showing Dialogs to registered / not registered users.
+The variable pRegistered is automaticly set if you use PlayerIsRegistered(playerid); & PlayerIsNotRegistered(playerid); to adapt the textdraws to the player.
+
+```
+
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) 
+{
+  if(playertextid == PlayerLoginTextDraw[playerid][0])
+  {
+    if(pRegistered[playerid] == true)
+    {
+      ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Melde dich mit deinem Passwort an","Login","Bye");
+    }
+    else
+    {
+      ShowPlayerDialog(playerid,D_Register,DIALOG_STYLE_PASSWORD,"Registrieren","Gib ein Passwort ein um ein Account anzulegen","Registrieren","Bye");
+    }
+}
+
+```
