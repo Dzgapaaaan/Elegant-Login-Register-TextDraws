@@ -18,9 +18,10 @@
 #define TextDrawHoverColor 0x80FF80FF
 //#define RandomLoginColors //Auskommentieren wenn du verschiedene Farben für die Login TextDraws haben möchtest
 
-static Text:GlobalLoginTextDraw[29],
+new Text:GlobalLoginTextDraw[29],
 PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
-realtimer[MAX_PLAYERS];
+realtimer[MAX_PLAYERS],
+bool:pRegistered[MAX_PLAYERS];
 
 #if defined RandomLoginColors
 
@@ -71,6 +72,7 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+  pRegistered[playerid] = false;
   KillTimer(realtimer[playerid]);
   
   #if defined ETD_OnPlayerDisconnect
@@ -93,18 +95,6 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) 
 {
-  if(playertextid == PlayerLoginTextDraw[playerid][0])
-  {
-    if(IsPlayerAdmin(playerid)) //Mit deiner Funktion ersetzen die überprüft ob der Spieler bereits registriert ist!!!!
-    {
-      ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Melde dich mit deinem Passwort an","Login","Bye");
-    }
-
-    else
-    {
-      ShowPlayerDialog(playerid,D_Register,DIALOG_STYLE_PASSWORD,"Registrieren","Gib ein Passwort ein um ein Account anzulegen","Registrieren","Bye");
-    }
-  }
 
   #if defined elr_OnPlayerClickPlayerTD
   return elr_OnPlayerClickPlayerTD(playerid, playertextid);
@@ -173,6 +163,7 @@ public LR_UpdateRealTime(playerid)
 
 stock PlayerIsRegistered(playerid)
 {
+  pRegistered[playerid] = true; 
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"Dieser Name ist ~g~registriert~w~.~n~Du kannst dich jetzt ~g~anmelden.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"      Login"); 
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], !"          Willkommen zur\172ck");
@@ -181,6 +172,7 @@ stock PlayerIsRegistered(playerid)
 stock PlayerIsNotRegistered(playerid)
 {
   new str[128]; //Adapt the size..
+  pRegistered[playerid] = false;
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"Dieser Name ist ~g~nicht~w~ in Verwendung.~n~Du kannst dich jetzt ~g~registrieren.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"Registrieren");
   format(str, sizeof(str),"Willkommen auf %s", LT_ServerName);
