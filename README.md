@@ -14,7 +14,7 @@ CreateGlobalLoginTextDraws()             - Create all Global-TextDraws
 CreatePlayerLoginTextDraws(playerid)     - Create all Player-TextDraws
 ShowLoginTextDraws(playerid)             - Show all TextDraws
 HideLoginTextDraws(playerid)             - Hide all TextDraws
-DestroyGlobalLoginTextDraws(playerid)    - Destroys all Global-TextDraws
+DestroyGlobalLoginTextDraws()            - Destroys all Global-TextDraws
 DestroyPlayerLoginTextDraws(playerid)    - Destroys all Player-TextDraws
 PlayerIsRegistered(playerid)             - Adapt the Textdraw messages to already registered players
 PlayerIsNotRegistered(playerid)          - Adapt the Textdraw messages to players who are not registered
