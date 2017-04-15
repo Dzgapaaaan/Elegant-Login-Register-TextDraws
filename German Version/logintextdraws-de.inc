@@ -95,6 +95,17 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) 
 {
+  if(playertextid == PlayerLoginTextDraw[playerid][0])
+  {
+    if(pRegistered[playerid] == true)
+    {
+      ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Melde dich mit deinem Passwort an","Login","Bye");
+    }
+    else
+    {
+      ShowPlayerDialog(playerid,D_Register,DIALOG_STYLE_PASSWORD,"Registrieren","Gib ein Passwort ein um ein Account anzulegen","Registrieren","Bye");
+    }
+  }
 
   #if defined elr_OnPlayerClickPlayerTD
   return elr_OnPlayerClickPlayerTD(playerid, playertextid);
@@ -163,7 +174,7 @@ public LR_UpdateRealTime(playerid)
 
 stock PlayerIsRegistered(playerid)
 {
-  pRegistered[playerid] = true; 
+  pRegistered[playerid] = true;
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"Dieser Name ist ~g~registriert~w~.~n~Du kannst dich jetzt ~g~anmelden.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"      Login"); 
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], !"          Willkommen zur\172ck");
@@ -171,8 +182,8 @@ stock PlayerIsRegistered(playerid)
 
 stock PlayerIsNotRegistered(playerid)
 {
-  new str[128]; //Adapt the size..
   pRegistered[playerid] = false;
+  new str[128]; //Adapt the size..
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"Dieser Name ist ~g~nicht~w~ in Verwendung.~n~Du kannst dich jetzt ~g~registrieren.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"Registrieren");
   format(str, sizeof(str),"Willkommen auf %s", LT_ServerName);
