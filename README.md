@@ -3,9 +3,9 @@
 
 | Credits | Reason |
 | --- | --- |
-| MP2 | PNS Coordinates |
+| n0minal| Inspired by his TextDraws|
 | Jelly23 | Scripting Support |
-| Kaliber | Scripting Support |
+| Zamaroth | TextDraw Editor |
 
 
 
