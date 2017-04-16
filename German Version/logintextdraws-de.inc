@@ -138,7 +138,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
     strcat(string,"< Dein Beispieltext hier >\n");
     strcat(string,"< Dein Beispieltext hier >\n");
     strcat(string,"< Dein Beispieltext hier >\n");
-    ShowPlayerDialog(playerid, D_Rules, DIALOG_STYLE_MSGBOX, "Unserer Regelwerk", string, "Ok", "");
+    ShowPlayerDialog(playerid, D_Rules, DIALOG_STYLE_MSGBOX, "Unser Regelwerk", string, "Ok", "");
 
   }
 
