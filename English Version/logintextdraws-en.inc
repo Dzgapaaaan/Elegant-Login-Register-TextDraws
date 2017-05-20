@@ -6,7 +6,7 @@
 
 @ Titel: Elegant Login / Register TextDraws
 @ Author: JustMe.77
-@ Version: 1.0.3
+@ Version: 1.0.4
 @ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
 
 */
@@ -16,7 +16,7 @@
 #define LT_ServerName "YOUR_SERVERNAME"
 #define LoginTextDrawColor 0xFF0000FF
 #define TextDrawHoverColor 0x80FF80FF
-//#define RandomLoginColors //Uncomment if you want to have Random Colors for each player
+#define RandomLoginColors //Uncomment if you want to have Random Colors for each player
 
 new Text:GlobalLoginTextDraw[29],
 PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
@@ -62,7 +62,7 @@ public OnGameModeInit()
 
 public OnPlayerConnect(playerid)
 {
-  realtimer[playerid] = SetTimerEx("LR_UpdateRealTime", 1000, true, "i", playerid);
+  CreatePlayerLoginTextDraws(playerid);
   #if defined ETD_OnPlayerConnect
   return ETD_OnPlayerConnect(playerid);
   #else
@@ -77,17 +77,6 @@ public OnPlayerDisconnect(playerid, reason)
   
   #if defined ETD_OnPlayerDisconnect
   return ETD_OnPlayerDisconnect(playerid,reason);
-  #else
-  return 1;
-  #endif
-}
-
-public OnPlayerSpawn(playerid)
-{
-  KillTimer(realtimer[playerid]);
-
-  #if defined ETD_OnPlayerSpawn
-  return ETD_OnPlayerSpawn(playerid);
   #else
   return 1;
   #endif
@@ -233,6 +222,7 @@ stock HideLoginTextDraws(playerid)
   }
 
   CancelSelectTextDraw(playerid);
+  KillTimer(realtimer[playerid]);
 }
 
 stock DestroyPlayerLoginTextDraws(playerid)
@@ -243,6 +233,7 @@ stock DestroyPlayerLoginTextDraws(playerid)
   }
 
   CancelSelectTextDraw(playerid);
+  KillTimer(realtimer[playerid]);
 }
 
 stock DestroyGlobalLoginTextDraws()
@@ -286,18 +277,6 @@ forward ETD_OnPlayerConnect();
 #define OnPlayerDisconnect ETD_OnPlayerDisconnect
 #if defined ETD_OnPlayerDisconnect
 forward ETD_OnPlayerDisconnect();
-#endif
-
-
-#if defined _ALS_OnPlayerSpawn
-#undef OnPlayerSpawn
-#else
-#define _ALS_OnPlayerSpawn
-#endif
-
-#define OnPlayerSpawn ETD_OnPlayerSpawn
-#if defined ETD_OnPlayerSpawn
-forward ETD_OnPlayerSpawn();
 #endif
 
 
@@ -662,6 +641,21 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[28], 1);
   TextDrawSetSelectable(GlobalLoginTextDraw[28], 0);
 
+  #if defined RandomLoginColors
+  new Randomtextdrawcolor = RandomLoginColorsArray[random(sizeof(RandomLoginColorsArray))];
+  TextDrawBoxColor(GlobalLoginTextDraw[2], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], Randomtextdrawcolor);
+  #else
+  TextDrawBoxColor(GlobalLoginTextDraw[2], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], LoginTextDrawColor);
+  #endif
+
 }
 
 
@@ -706,5 +700,8 @@ stock CreatePlayerLoginTextDraws(playerid)
   PlayerTextDrawSetOutline(playerid,PlayerLoginTextDraw[playerid][3], 1);
   PlayerTextDrawSetProportional(playerid,PlayerLoginTextDraw[playerid][3], 1);
   PlayerTextDrawSetSelectable(playerid,PlayerLoginTextDraw[playerid][3], 0);
+
+  KillTimer(realtimer[playerid]);
+  realtimer[playerid] = SetTimerEx("LR_UpdateRealTime", 1000, true, "i", playerid);
 }
 
