@@ -62,6 +62,7 @@ public OnGameModeInit()
 
 public OnPlayerConnect(playerid)
 {
+  pRegistered[playerid] = false;
   CreatePlayerLoginTextDraws(playerid);
   #if defined ETD_OnPlayerConnect
   return ETD_OnPlayerConnect(playerid);
