@@ -82,17 +82,6 @@ public OnPlayerDisconnect(playerid, reason)
   #endif
 }
 
-public OnPlayerSpawn(playerid)
-{
-  KillTimer(realtimer[playerid]);
-
-  #if defined ETD_OnPlayerSpawn
-  return ETD_OnPlayerSpawn(playerid);
-  #else
-  return 1;
-  #endif
-}
-
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) 
 {
   if(playertextid == PlayerLoginTextDraw[playerid][0])
@@ -288,19 +277,6 @@ forward ETD_OnPlayerConnect();
 #if defined ETD_OnPlayerDisconnect
 forward ETD_OnPlayerDisconnect();
 #endif
-
-
-#if defined _ALS_OnPlayerSpawn
-#undef OnPlayerSpawn
-#else
-#define _ALS_OnPlayerSpawn
-#endif
-
-#define OnPlayerSpawn ETD_OnPlayerSpawn
-#if defined ETD_OnPlayerSpawn
-forward ETD_OnPlayerSpawn();
-#endif
-
 
 #if defined _ALS_OnPlayerClickTextDraw
 #undef OnPlayerClickTextDraw
