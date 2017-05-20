@@ -6,7 +6,7 @@
 
 @ Titel: Elegant Login / Register TextDraws
 @ Author: JustMe.77
-@ Version: 1.0.3
+@ Version: 1.0.4
 @ Download: https://github.com/JustMe77/Elegant-Login-Register-TextDraws
 
 */
@@ -16,7 +16,7 @@
 #define LT_ServerName "DEIN_SERVERNAME"
 #define LoginTextDrawColor 0xFF0000FF
 #define TextDrawHoverColor 0x80FF80FF
-//#define RandomLoginColors //Auskommentieren wenn du verschiedene Farben für die Login TextDraws haben möchtest
+#define RandomLoginColors //Auskommentieren wenn du verschiedene Farben für die Login TextDraws haben möchtest
 
 new Text:GlobalLoginTextDraw[29],
 PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
@@ -62,7 +62,7 @@ public OnGameModeInit()
 
 public OnPlayerConnect(playerid)
 {
-  realtimer[playerid] = SetTimerEx("LR_UpdateRealTime", 1000, true, "i", playerid);
+  CreatePlayerLoginTextDraws(playerid);
   #if defined ETD_OnPlayerConnect
   return ETD_OnPlayerConnect(playerid);
   #else
@@ -232,6 +232,7 @@ stock HideLoginTextDraws(playerid)
   }
 
   CancelSelectTextDraw(playerid);
+  KillTimer(realtimer[playerid]);
 }
 
 stock DestroyPlayerLoginTextDraws(playerid)
@@ -242,6 +243,7 @@ stock DestroyPlayerLoginTextDraws(playerid)
   }
 
   CancelSelectTextDraw(playerid);
+  KillTimer(realtimer[playerid]);
 }
 
 stock DestroyGlobalLoginTextDraws()
@@ -661,6 +663,21 @@ stock CreateGlobalLoginTextDraws()
   TextDrawSetProportional(GlobalLoginTextDraw[28], 1);
   TextDrawSetSelectable(GlobalLoginTextDraw[28], 0);
 
+  #if defined RandomLoginColors
+  new Randomtextdrawcolor = RandomLoginColorsArray[random(sizeof(RandomLoginColorsArray))];
+  TextDrawBoxColor(GlobalLoginTextDraw[2], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], Randomtextdrawcolor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], Randomtextdrawcolor);
+  #else
+  TextDrawBoxColor(GlobalLoginTextDraw[2], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[4], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[6], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[8], LoginTextDrawColor);
+  TextDrawBoxColor(GlobalLoginTextDraw[10], LoginTextDrawColor);
+  #endif
+
 }
 
 
@@ -705,5 +722,8 @@ stock CreatePlayerLoginTextDraws(playerid)
   PlayerTextDrawSetOutline(playerid,PlayerLoginTextDraw[playerid][3], 1);
   PlayerTextDrawSetProportional(playerid,PlayerLoginTextDraw[playerid][3], 1);
   PlayerTextDrawSetSelectable(playerid,PlayerLoginTextDraw[playerid][3], 0);
+
+  KillTimer(realtimer[playerid]);
+  realtimer[playerid] = SetTimerEx("LR_UpdateRealTime", 1000, true, "i", playerid);
 }
 
