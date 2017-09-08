@@ -11,12 +11,23 @@
 
 */
 
-//Settings
+#define ELRT:: elegantlrt_
 
-#define LT_ServerName "YOUR_SERVERNAME"
+/*FORWARDS*/
+forward ELRT::OnPlayerClickLogin(playerid);
+forward ELRT::OnPlayerClickAbout(playerid);
+forward ELRT::OnPlayerClickRules(playerid);
+forward ELRT::UpdateRealTime(playerid);
+
+//Settings
 #define LoginTextDrawColor 0xFF0000FF
 #define TextDrawHoverColor 0x80FF80FF
 #define RandomLoginColors //Uncomment if you want to have Random Colors for each player
+
+new ELRT::ServerName[256];
+
+#define ELRT::isnull(%1) \
+  ((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
 
 new Text:GlobalLoginTextDraw[29],
 PlayerText:PlayerLoginTextDraw[MAX_PLAYERS][4],
@@ -49,9 +60,22 @@ enum
 };
 
 
+stock ELRT::SetServerName(name[])
+{
+  if(ELRT::isnull(name))
+  {
+    printf("[ERROR] Setting Server Name To Default Value");
+    strcat(ELRT::ServerName, "YOUR_SERVERNAME");
+  }
+  else
+  {
+    strcat(ELRT::ServerName, name);
+  }
+}
+
 public OnGameModeInit()
 {
-  CreateGlobalLoginTextDraws();
+  ELRT::CreateGlobalLoginTextDraws();
 
   #if defined ETD_OnGameModeInit
   return ETD_OnGameModeInit();
@@ -63,7 +87,7 @@ public OnGameModeInit()
 public OnPlayerConnect(playerid)
 {
   pRegistered[playerid] = false;
-  CreatePlayerLoginTextDraws(playerid);
+  ELRT::CreatePlayerLoginTextDraws(playerid);
   #if defined ETD_OnPlayerConnect
   return ETD_OnPlayerConnect(playerid);
   #else
@@ -87,15 +111,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) //You migh
 {
   if(playertextid == PlayerLoginTextDraw[playerid][0])
   {
-    if(pRegistered[playerid] == true)
-    {
-      ShowPlayerDialog(playerid,D_Login,DIALOG_STYLE_PASSWORD,"Log in","Type your password below to sign in","Sign In","Quit");
-    }
-
-    else
-    {
-      ShowPlayerDialog(playerid,D_Register,DIALOG_STYLE_PASSWORD,"Registering","Type in your password to register yourself.","Register","Quit");
-    }
+    if(funcidx("elegantlrt_OnPlayerClickLogin") != -1) CallLocalFunction("elegantlrt_OnPlayerClickLogin","d",playerid);
   }
 
   #if defined elr_OnPlayerClickPlayerTD
@@ -110,39 +126,17 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
   new string[512]; //Adapt the size..
   if(clickedid == GlobalLoginTextDraw[11])
   {   
-    //About us Button
-    strcat(string,"{FF0000}About the server:{FFFFFF}\n\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    ShowPlayerDialog(playerid, D_About, DIALOG_STYLE_MSGBOX, "About the Server", string, "Ok", "");
+    if(funcidx("elegantlrt_OnPlayerClickAbout") != -1) CallLocalFunction("elegantlrt_OnPlayerClickAbout","d",playerid);
   }
 
   if(clickedid == GlobalLoginTextDraw[12])
   {
-    //Rules Button
-    strcat(string,"{FF0000}Rules:{FFFFFF}\n\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    ShowPlayerDialog(playerid, D_Rules, DIALOG_STYLE_MSGBOX, "Our Rules", string, "Ok", "");
-
+    if(funcidx("elegantlrt_OnPlayerClickRules") != -1) CallLocalFunction("elegantlrt_OnPlayerClickRules","d",playerid);
   }
 
   if(clickedid == GlobalLoginTextDraw[13])
   {
-    //Credits Button
-    strcat(string,"{FF0000}Credits:{FFFFFF}\n\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    strcat(string,"< Insert your text here >\n");
-    ShowPlayerDialog(playerid, D_Credits, DIALOG_STYLE_MSGBOX, "Credits", string, "Ok", "");
+    if(funcidx("elegantlrt_OnPlayerClickCredits") != -1) CallLocalFunction("elegantlrt_OnPlayerClickCredits", "d", playerid);
   }
 
   #if defined ETD_OnPlayerClickTextDraw
@@ -153,8 +147,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 }
 
 
-forward LR_UpdateRealTime(playerid);
-public LR_UpdateRealTime(playerid)
+public ELRT::UpdateRealTime(playerid)
 {
   new str[16];
   gettime(str[0], str[1]);
@@ -163,7 +156,7 @@ public LR_UpdateRealTime(playerid)
   return 1;
 }
 
-stock PlayerIsRegistered(playerid)
+stock ELRT::PlayerIsRegistered(playerid)
 {
   pRegistered[playerid] = true;
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"This name seem to be ~g~registered~w~.~n~You can now ~g~login~w~ to your Account.");
@@ -171,17 +164,17 @@ stock PlayerIsRegistered(playerid)
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], !"          Welcome back!"); 
 }
 
-stock PlayerIsNotRegistered(playerid)
+stock ELRT::PlayerIsNotRegistered(playerid)
 {
   pRegistered[playerid] = false;
   new str[128]; //Adapt the size..
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][3], !"This name is ~g~not~w~ registered.~n~You can now create an ~g~Account.");
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][0], !"   Register");
-  format(str, sizeof(str),"Welcome to %s", LT_ServerName);
+  format(str, sizeof(str),"Welcome to %s", ELRT::ServerName);
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], str);
 }
 
-stock ShowLoginTextDraws(playerid)
+stock ELRT::ShowLoginTextDraws(playerid)
 {
   for(new i; i < sizeof(PlayerLoginTextDraw[]); i++)
   {
@@ -210,7 +203,7 @@ stock ShowLoginTextDraws(playerid)
   #endif
 }
 
-stock HideLoginTextDraws(playerid)
+stock ELRt::HideLoginTextDraws(playerid)
 {
   for(new i; i < sizeof(PlayerLoginTextDraw[]); i++)
   {
@@ -226,7 +219,7 @@ stock HideLoginTextDraws(playerid)
   KillTimer(realtimer[playerid]);
 }
 
-stock DestroyPlayerLoginTextDraws(playerid)
+stock ELRT::DestroyPlayerLoginTextDraws(playerid)
 {
   for(new i; i < sizeof(PlayerLoginTextDraw[]); i++)
   {
@@ -237,7 +230,7 @@ stock DestroyPlayerLoginTextDraws(playerid)
   KillTimer(realtimer[playerid]);
 }
 
-stock DestroyGlobalLoginTextDraws()
+stock ELRT::DestroyGlobalLoginTextDraws()
 {
   for(new i; i<sizeof(GlobalLoginTextDraw); i++)
   {
@@ -305,7 +298,7 @@ forward elr_OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
 
 
 
-stock CreateGlobalLoginTextDraws()
+stock ELRT::CreateGlobalLoginTextDraws()
 {
   GlobalLoginTextDraw[0] = TextDrawCreate(169.000000, 121.000000, !"__");
   TextDrawBackgroundColor(GlobalLoginTextDraw[0], 255);
@@ -660,7 +653,7 @@ stock CreateGlobalLoginTextDraws()
 }
 
 
-stock CreatePlayerLoginTextDraws(playerid)
+stock ELRT::CreatePlayerLoginTextDraws(playerid)
 {
   new str[128];
   PlayerLoginTextDraw[playerid][0] = CreatePlayerTextDraw(playerid,192.000000, 166.000000, !"      Login");
@@ -681,7 +674,7 @@ stock CreatePlayerLoginTextDraws(playerid)
   PlayerTextDrawSetOutline(playerid,PlayerLoginTextDraw[playerid][1], 1);
   PlayerTextDrawSetProportional(playerid,PlayerLoginTextDraw[playerid][1], 1);
   PlayerTextDrawSetSelectable(playerid,PlayerLoginTextDraw[playerid][1], 0);
-  format(str, sizeof(str),"Welcome to %s", LT_ServerName);
+  format(str, sizeof(str),"Welcome to %s", ELRT::ServerName);
   PlayerTextDrawSetString(playerid, PlayerLoginTextDraw[playerid][1], str);
 
   PlayerLoginTextDraw[playerid][2] = CreatePlayerTextDraw(playerid,427.000000, 123.000000, !"00:00 Time");
